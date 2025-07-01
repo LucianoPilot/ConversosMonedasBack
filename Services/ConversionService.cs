@@ -16,9 +16,9 @@ namespace ConversorMonedas.Services
             _userRepository = userRepository;
         }
 
-        public async Task<CurrencyConversionResponseDto?> ConvertAsync(CurrencyConversionRequestDto dto)
+        public async Task<CurrencyConversionResponseDto?> ConvertAsync(int userId, string fromCode, string toCode, decimal amount)
         {
-            var user = await _userRepository.GetByIdAsync(dto.UserId);
+            var user = await _userRepository.GetByIdAsync(userId);
             if (user == null || user.Subscription == null)
                 return null;
 
@@ -31,26 +31,24 @@ namespace ConversorMonedas.Services
                 _ => 0
             };
 
-            // ❌ Límite alcanzado
             if (user.ConversionCount >= maxConversions)
                 return null;
 
-            var fromCoin = await _coinRepository.GetByCodeAsync(dto.FromCode);
-            var toCoin = await _coinRepository.GetByCodeAsync(dto.ToCode);
+            var fromCoin = await _coinRepository.GetByCodeAsync(fromCode);
+            var toCoin = await _coinRepository.GetByCodeAsync(toCode);
             if (fromCoin == null || toCoin == null)
                 return null;
 
-            decimal result = dto.Amount * fromCoin.IC / toCoin.IC;
+            decimal result = amount * fromCoin.IC / toCoin.IC;
 
-            // ✅ Incrementar contador y guardar
             user.ConversionCount++;
             await _userRepository.SaveChangesAsync();
 
             return new CurrencyConversionResponseDto
             {
-                FromCode = dto.FromCode,
-                ToCode = dto.ToCode,
-                Amount = dto.Amount,
+                FromCode = fromCode,
+                ToCode = toCode,
+                Amount = amount,
                 Result = Math.Round(result, 2)
             };
         }

@@ -52,7 +52,7 @@ namespace ConversorMonedas.Migrations
                     Password = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     SubscriptionId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Role = table.Column<string>(type: "TEXT", nullable: false),
+                    Rol = table.Column<string>(type: "TEXT", nullable: false),
                     ConversionCount = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>

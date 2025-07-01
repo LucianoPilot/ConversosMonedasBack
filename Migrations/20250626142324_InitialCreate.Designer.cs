@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConversorMonedas.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250621175313_InitialCreate")]
+    [Migration("20250626142324_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -138,7 +138,7 @@ namespace ConversorMonedas.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Role")
+                    b.Property<string>("Rol")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

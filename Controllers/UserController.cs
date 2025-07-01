@@ -41,11 +41,13 @@ namespace ConversorMonedas.Controllers
         }
 
         [HttpPut("{id}/subscription/{subscriptionId}")]
-        public async Task<IActionResult> ChangeSubscription(int id, int subscriptionId)
+        public async Task<IActionResult> ChangeSubscription(ChangeSubscriptionDto dto)
         {
-            var success = await _service.ChangeSubscription(id, subscriptionId);
-            if (!success) return NotFound();
-            return NoContent();
+            var result = await _service.ChangeSubscription(dto.UserId, dto.SubscriptionId);
+            if (!result)
+                return BadRequest("Usuario no encontrado");
+
+            return Ok("Suscripción actualizada y contador reiniciado");
         }
 
         [HttpPost]

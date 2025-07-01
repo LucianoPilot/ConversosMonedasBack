@@ -44,6 +44,7 @@ namespace ConversorMonedas.Services
             if (user == null) return false;
 
             user.SubscriptionId = subscriptionId;
+            user.ConversionCount = 0;
             await _repository.SaveChangesAsync();
             return true;
         }
