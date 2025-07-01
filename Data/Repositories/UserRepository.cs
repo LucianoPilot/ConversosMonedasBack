@@ -50,7 +50,7 @@ namespace ConversorMonedas.Repositories
         public async Task<User?> GetUserByUsernameAndPassword(string name, string password)
         {
             return await _context.Users
-                .Include(u => u.Subscription) // si necesitás el rol o suscripción
+                .Include(u => u.Subscription)
                 .FirstOrDefaultAsync(u => u.Name == name && u.Password == password);
         }
 
