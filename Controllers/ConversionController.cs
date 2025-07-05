@@ -1,10 +1,13 @@
 ﻿using ConversorMonedas.Models;
 using ConversorMonedas.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace ConversorMonedas.Controllers
 {
+
+        [Authorize]
         [ApiController]
         [Route("api/[controller]")]
         public class ConversionController : ControllerBase

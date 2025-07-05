@@ -10,6 +10,7 @@ namespace ConversorMonedas.Repositories.Interfaces
         Task AddAsync(User user);
         Task DeleteAsync(User user);
         Task SaveChangesAsync();
+        Task<int?> GetConversionCountAsync(int userId);
 
         Task<User?> GetUserByUsernameAndPassword(string name, string password);
     }

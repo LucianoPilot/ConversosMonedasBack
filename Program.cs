@@ -49,6 +49,16 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200") // front
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -81,20 +91,22 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseAuthentication();
 
-app.UseAuthorization();
+app.UseHttpsRedirection();             //  Primero
 
-app.UseHttpsRedirection();
+app.UseCors("AllowFrontend");         // CORS
 
-app.UseAuthorization();
+app.UseAuthentication();              // Luego autenticación
+app.UseAuthorization();               // Luego autorización
 
-app.MapControllers();
+app.MapControllers();                 // Por último, los endpoints
+
 
 app.Run();

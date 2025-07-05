@@ -11,6 +11,7 @@ namespace ConversorMonedas.Services.Interfaces
         Task<bool> ChangeSubscription(int userId, int subscriptionId);
         Task<IEnumerable<UserResponseDto>> GetAllAsync();
         Task<UserResponseDto?> GetByIdAsync(int id);
+        Task<int?> GetConversionCountAsync(int userId);
 
         Task<User?> ValidateUser(AuthDTO auth);
 

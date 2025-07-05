@@ -4,6 +4,7 @@ using ConversorMonedas.Models;
 using ConversorMonedas.Data.Repositories;
 using ConversorMonedas.Repositories.Interfaces;
 using ConversorMonedas.Services.Interfaces;
+using ConversorMonedas.Repositories;
 
 namespace ConversorMonedas.Services
 {
@@ -58,7 +59,7 @@ namespace ConversorMonedas.Services
                 Password = dto.Password,
                 SubscriptionId = dto.SubscriptionId,
                 Rol = dto.Role,
-                ConversionCount = dto.ConversionCount
+                ConversionCount = 0
             };
 
             await _repository.AddAsync(user);
@@ -66,6 +67,12 @@ namespace ConversorMonedas.Services
 
             return user.ToDto();
         }
+
+        public async Task<int?> GetConversionCountAsync(int userId)
+        {
+            return await _repository.GetConversionCountAsync(userId);
+        }
+
 
         public async Task<User?> ValidateUser(AuthDTO auth)
         {

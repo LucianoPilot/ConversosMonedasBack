@@ -53,6 +53,11 @@ namespace ConversorMonedas.Repositories
                 .Include(u => u.Subscription)
                 .FirstOrDefaultAsync(u => u.Name == name && u.Password == password);
         }
+        public async Task<int?> GetConversionCountAsync(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            return user?.ConversionCount;
+        }
 
         public User? Authenticate(string username, string password)
         {

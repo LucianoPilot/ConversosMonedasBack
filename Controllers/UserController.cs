@@ -2,6 +2,7 @@
 using ConversorMonedas.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ConversorMonedas.Controllers
 {
@@ -40,15 +41,36 @@ namespace ConversorMonedas.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}/subscription/{subscriptionId}")]
-        public async Task<IActionResult> ChangeSubscription(ChangeSubscriptionDto dto)
+        [Authorize]
+        [HttpPut("subscription/{subscriptionId}")]
+        public async Task<IActionResult> ChangeSubscription(int subscriptionId)
         {
-            var result = await _service.ChangeSubscription(dto.UserId, dto.SubscriptionId);
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var result = await _service.ChangeSubscription(userId, subscriptionId);
+
             if (!result)
                 return BadRequest("Usuario no encontrado");
 
-            return Ok("Suscripción actualizada y contador reiniciado");
+            return Ok(new { message = "Suscripción actualizada y contador reiniciado" });
         }
+
+        [HttpGet("me/conversion-count")]
+        [Authorize]
+        public async Task<IActionResult> GetConversionCount()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+                return Unauthorized();
+
+            int userId = int.Parse(userIdClaim.Value);
+            var count = await _service.GetConversionCountAsync(userId);
+
+            if (count is null)
+                return NotFound("Usuario no encontrado");
+
+            return Ok(count);
+        }
+
 
         [HttpPost]
 
